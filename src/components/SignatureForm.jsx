@@ -1,3 +1,5 @@
+import { Input } from "./ui/input"
+
 const SignatureForm = ({ signatureData, setSignatureData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -8,71 +10,68 @@ const SignatureForm = ({ signatureData, setSignatureData }) => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4 text-gray-700">Enter Your Information</h2>
-      <form className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="flex flex-col space-y-1.5 p-6">
+        <h3 className="text-2xl font-semibold leading-none tracking-tight">Enter Your Information</h3>
+        <p className="text-sm text-muted-foreground">
+          Fill in your details to generate your email signature.
+        </p>
+      </div>
+      <div className="p-6 pt-0 space-y-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             Full Name
           </label>
-          <input
-            type="text"
+          <Input
             id="name"
             name="name"
             value={signatureData.name}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
             placeholder="John Doe"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="positionPT" className="block text-sm font-medium text-gray-700">
+          <div className="space-y-2">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Position (Portuguese)
             </label>
-            <input
-              type="text"
+            <Input
               id="positionPT"
               name="positionPT"
               value={signatureData.positionPT}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
               placeholder="Desenvolvedor Senior"
             />
           </div>
 
-          <div>
-            <label htmlFor="positionEN" className="block text-sm font-medium text-gray-700">
+          <div className="space-y-2">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Position (English)
             </label>
-            <input
-              type="text"
+            <Input
               id="positionEN"
               name="positionEN"
               value={signatureData.positionEN}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
               placeholder="Senior Developer"
             />
           </div>
         </div>
 
-        <div>
-          <label htmlFor="otherPositions" className="block text-sm font-medium text-gray-700">
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             Other Positions
           </label>
-          <input
-            type="text"
+          <Input
             id="otherPositions"
             name="otherPositions"
             value={signatureData.otherPositions}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
             placeholder="PhD, Professor"
           />
         </div>
-      </form>
+      </div>
     </div>
   )
 }
