@@ -1,35 +1,91 @@
 import { useRef, useEffect, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Mail, X } from 'lucide-react'
+import { Mail, X, CheckCircle2 } from 'lucide-react'
 
 const emailClients = [
   {
     name: 'Gmail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg',
+    instructions: `
+      <h3>How to add your signature in Gmail:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   },
   {
     name: 'Outlook',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg',
+    instructions: `
+      <h3>How to add your signature in Outlook:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   },
   {
     name: 'Apple Mail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Apple_Mail.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Apple_Mail.svg',
+    instructions: `
+      <h3>How to add your signature in Apple Mail:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   },
   {
     name: 'iPhone/iPad',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+    instructions: `
+      <h3>How to add your signature on iPhone/iPad:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   },
   {
     name: 'Samsung Mail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Samsung_Logo.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Samsung_Logo.svg',
+    instructions: `
+      <h3>How to add your signature in Samsung Mail:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   },
   {
     name: 'Thunderbird',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Thunderbird_Logo%2C_2018.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Thunderbird_Logo%2C_2018.svg',
+    instructions: `
+      <h3>How to add your signature in Thunderbird:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   },
   {
     name: 'Windows Mail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg'
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
+    instructions: `
+      <h3>How to add your signature in Windows Mail:</h3>
+      <ol>
+        <li>Step 1: Instructions will be added here</li>
+        <li>Step 2: Instructions will be added here</li>
+        <li>Step 3: Instructions will be added here</li>
+      </ol>
+    `
   }
 ]
 
@@ -39,6 +95,7 @@ const SignaturePreview = ({ signatureData }) => {
   const [templateHtml, setTemplateHtml] = useState('')
   const [showInstructions, setShowInstructions] = useState(false)
   const [logoBase64, setLogoBase64] = useState('')
+  const [selectedClient, setSelectedClient] = useState(null)
 
   // Function to convert image to base64
   const getImageAsBase64 = async (url) => {
@@ -139,6 +196,14 @@ const SignaturePreview = ({ signatureData }) => {
     }
   }
 
+  const handleClientClick = (client) => {
+    setSelectedClient(client)
+  }
+
+  const handleBackToClients = () => {
+    setSelectedClient(null)
+  }
+
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div className="flex flex-col space-y-1.5 p-6">
@@ -168,34 +233,75 @@ const SignaturePreview = ({ signatureData }) => {
       <Dialog.Root open={showInstructions} onOpenChange={setShowInstructions}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-          <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
-            <Dialog.Title className="text-lg font-semibold">
-              Signature copied to clipboard!
-            </Dialog.Title>
-            <Dialog.Description className="mt-2 mb-4 text-sm text-muted-foreground">
-              Want help setting up your signature? Choose your email client for detailed instructions:
-            </Dialog.Description>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {emailClients.map((client) => (
-                <button
-                  key={client.name}
-                  onClick={() => {
-                    alert(`Instructions for ${client.name} will be added soon!`)
-                  }}
-                  className="flex flex-col items-center justify-center p-3 rounded-lg border hover:bg-accent transition-colors"
-                >
-                  <img src={client.icon} alt={client.name} className="w-8 h-8 mb-2" />
-                  <span className="text-sm">{client.name}</span>
-                </button>
-              ))}
-            </div>
+          <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-white shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] overflow-hidden">
+            {!selectedClient ? (
+              <>
+                <div className="flex items-center gap-2 text-emerald-600 p-6">
+                  <CheckCircle2 className="h-5 w-5" />
+                  <Dialog.Title className="text-lg font-semibold">
+                    Signature copied to clipboard!
+                  </Dialog.Title>
+                </div>
+                <Dialog.Description className="px-6 text-sm text-muted-foreground mb-6">
+                  Want help setting up your signature? Choose your email client for detailed instructions:
+                </Dialog.Description>
+                
+                <div className="px-6 pb-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {emailClients.map((client) => (
+                    <button
+                      key={client.name}
+                      onClick={() => handleClientClick(client)}
+                      className="flex flex-col items-center justify-center p-3 rounded-lg border bg-white hover:bg-gray-50 transition-colors"
+                    >
+                      <img src={client.icon} alt={client.name} className="w-8 h-8 mb-2" />
+                      <span className="text-sm">{client.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center bg-[#F3F3F3] px-4 py-3">
+                  <button
+                    onClick={handleBackToClients}
+                    className="flex items-center text-sm text-gray-600 hover:text-gray-900 bg-transparent border-none outline-none cursor-pointer"
+                    style={{ padding: 0 }}
+                  >
+                    <span className="mr-1">←</span>
+                    <span>back</span>
+                  </button>
+                  <div className="flex items-center gap-2 ml-4">
+                    <img src={selectedClient.icon} alt={selectedClient.name} className="w-5 h-5" />
+                    <Dialog.Title className="text-base font-normal">
+                      {selectedClient.name}
+                    </Dialog.Title>
+                  </div>
+                </div>
+                <div className="p-6">
+                  {selectedClient.name === 'Outlook' ? (
+                    <ol className="list-decimal pl-5 space-y-4">
+                      <li>Copy the signature from this website or your inbox, then within "New" Outlook select the Settings Gear icon near the top right of the window.</li>
+                      <li>Select Accounts &gt; Signatures.</li>
+                      <li>Click "New Signature" and give it a name.</li>
+                      <li>In the large white box paste your signature using Ctrl+V on Windows or Command+V on Mac.</li>
+                      <li>Select Save when you are done.</li>
+                      <li>If you want your signature to appear at the bottom of emails automatically, select which signature you would want for New Messages, and for Replies/Forwards. Then save again</li>
+                    </ol>
+                  ) : (
+                    <div 
+                      className="prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: selectedClient.instructions }}
+                    />
+                  )}
+                </div>
+              </>
+            )}
 
             <Dialog.Close asChild>
               <button
-                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+                className="absolute right-4 top-4 p-1.5 rounded-full bg-white hover:bg-red-50 transition-colors border"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 text-gray-500 hover:text-red-500" />
                 <span className="sr-only">Close</span>
               </button>
             </Dialog.Close>
