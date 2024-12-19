@@ -291,21 +291,21 @@ const SignaturePreview = ({ signatureData }) => {
   }
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="flex flex-col space-y-1.5 p-6">
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full overflow-hidden">
+      <div className="flex flex-col space-y-1.5 p-3 sm:p-6">
         <h3 className="text-2xl font-semibold leading-none tracking-tight">Pré-visualização da Assinatura</h3>
         <p className="text-sm text-muted-foreground">
           Veja como sua assinatura vai ficar no seu email.
         </p>
       </div>
       
-      <div className="p-6 pt-0">
+      <div className="p-3 sm:p-6 pt-0">
         {/* Hidden element for copying - contains the same content as preview */}
         <div ref={signatureRef} style={{ position: 'absolute', left: '-9999px' }} />
         
         {/* Preview wrapper showing the signature content */}
-        <div className="rounded-md border p-4 mb-4 overflow-auto">
-          <div ref={previewWrapperRef} />
+        <div className="rounded-md border p-2 sm:p-4 mb-4 overflow-x-auto">
+          <div ref={previewWrapperRef} style={{ width: 'min(fit-content, 100%)', minWidth: '300px' }} />
         </div>
 
         <button
