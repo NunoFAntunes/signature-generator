@@ -35,6 +35,7 @@ const emailClients = [
 
 const SignaturePreview = ({ signatureData }) => {
   const signatureRef = useRef(null)
+  const previewWrapperRef = useRef(null)
   const [templateHtml, setTemplateHtml] = useState('')
   const [showInstructions, setShowInstructions] = useState(false)
 
@@ -42,23 +43,22 @@ const SignaturePreview = ({ signatureData }) => {
     fetch('/signature-design/signature-template.htm')
       .then(response => response.text())
       .then(html => {
-        const fixedHtml = html.replace(
-          /src="[^"]*image001\.png"/g,
-          'src="/signature-design/signature-template/image001.png"'
-        ).replace(
-          /href="signature-template\//g,
-          'href="/signature-design/signature-template/'
-        ).replace(/charset=windows-1252/g, 'charset=utf-8')
+        const fixedHtml = html
+          .replace(/src="[^"]*image001\.png"/g, 'src="/signature-design/signature-template/image001.png"')
+          .replace(/href="signature-template\//g, 'href="/signature-design/signature-template/"')
+          .replace(/charset=windows-1252/g, 'charset=utf-8')
         setTemplateHtml(fixedHtml)
       })
       .catch(error => {
         console.error('Error loading template:', error)
-        signatureRef.current.innerHTML = '<p class="text-destructive">Error loading signature template</p>'
+        if (previewWrapperRef.current) {
+          previewWrapperRef.current.innerHTML = '<p class="text-destructive">Error loading signature template</p>'
+        }
       })
   }, [])
 
   useEffect(() => {
-    if (templateHtml && signatureRef.current) {
+    if (templateHtml && signatureRef.current && previewWrapperRef.current) {
       let modifiedHtml = templateHtml
 
       const replacements = {
@@ -81,19 +81,29 @@ const SignaturePreview = ({ signatureData }) => {
         }
       }
 
-      signatureRef.current.innerHTML = modifiedHtml
+      // Extract only the body content
+      const bodyContent = modifiedHtml.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] || modifiedHtml
+      
+      // Update both refs with the body content
+      signatureRef.current.innerHTML = bodyContent
+      previewWrapperRef.current.innerHTML = bodyContent
     }
   }, [templateHtml, signatureData])
 
   const copySignature = () => {
     if (signatureRef.current) {
-      const range = document.createRange()
-      range.selectNode(signatureRef.current)
-      window.getSelection().removeAllRanges()
-      window.getSelection().addRange(range)
-      document.execCommand('copy')
-      window.getSelection().removeAllRanges()
-      setShowInstructions(true)
+      try {
+        const range = document.createRange()
+        range.selectNode(signatureRef.current)
+        window.getSelection().removeAllRanges()
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+        setShowInstructions(true)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+        alert('Failed to copy signature. Please try again.')
+      }
     }
   }
 
@@ -107,8 +117,12 @@ const SignaturePreview = ({ signatureData }) => {
       </div>
       
       <div className="p-6 pt-0">
-        <div className="rounded-md border bg-muted p-4 mb-4">
-          <div ref={signatureRef} className="font-sans" />
+        {/* Hidden element for copying - contains the same content as preview */}
+        <div ref={signatureRef} style={{ position: 'absolute', left: '-9999px' }} />
+        
+        {/* Preview wrapper showing the signature content */}
+        <div className="rounded-md border p-4 mb-4 overflow-auto">
+          <div ref={previewWrapperRef} />
         </div>
 
         <button
@@ -135,7 +149,6 @@ const SignaturePreview = ({ signatureData }) => {
                 <button
                   key={client.name}
                   onClick={() => {
-                    // Add specific instructions for each client
                     alert(`Instructions for ${client.name} will be added soon!`)
                   }}
                   className="flex flex-col items-center justify-center p-3 rounded-lg border hover:bg-accent transition-colors"
