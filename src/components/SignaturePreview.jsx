@@ -61,10 +61,15 @@ const SignaturePreview = ({ signatureData }) => {
     if (templateHtml && signatureRef.current && previewWrapperRef.current) {
       let modifiedHtml = templateHtml
 
+      // Capitalize positions and handle empty states
+      const positionPT = signatureData.positionPT ? signatureData.positionPT.toUpperCase() : 'YOUR POSITION (PT)'
+      const positionEN = signatureData.positionEN ? signatureData.positionEN.toUpperCase() : 'YOUR POSITION (EN)'
+      const otherPositions = signatureData.otherPositions ? signatureData.otherPositions.toUpperCase() : ''
+
       const replacements = {
         '{{NAME}}': signatureData.name || 'Your Name',
-        '{{POSITION_PT}}': signatureData.positionPT || 'Your Position (PT)',
-        '{{POSITION_EN}}': signatureData.positionEN || 'Your Position (EN)'
+        '{{POSITION_PT}}': positionPT,
+        '{{POSITION_EN}}': positionEN
       }
 
       modifiedHtml = Object.entries(replacements).reduce(
@@ -72,13 +77,15 @@ const SignaturePreview = ({ signatureData }) => {
         modifiedHtml
       )
 
-      if (signatureData.otherPositions) {
-        const positionEndIndex = modifiedHtml.indexOf('</div>', modifiedHtml.indexOf(replacements['{{POSITION_EN}}']))
-        if (positionEndIndex !== -1) {
-          modifiedHtml = modifiedHtml.slice(0, positionEndIndex) + 
-            `<br><span style="font-style: italic;">${signatureData.otherPositions}</span>` +
-            modifiedHtml.slice(positionEndIndex)
-        }
+      // Handle other positions placeholder
+      if (otherPositions) {
+        modifiedHtml = modifiedHtml.replace(
+          '{{OTHER_POSITIONS}}',
+          `<span style='font-size:10.0pt;font-family:"Helvetica",sans-serif;color:#777777;letter-spacing:1.5pt;mso-font-kerning:0pt;mso-ligatures:none'>${otherPositions}</span>`
+        )
+      } else {
+        // Remove the placeholder if no other positions
+        modifiedHtml = modifiedHtml.replace('{{OTHER_POSITIONS}}', '')
       }
 
       // Extract only the body content
