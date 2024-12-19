@@ -17,7 +17,7 @@ function App() {
           <img 
             src="/signature-design/signature-template/image001.png" 
             alt="Company Logo" 
-            className="h-16 mb-4"
+            className="h-16 mb-8"
           />
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
             Gerar Assinatura de Email
