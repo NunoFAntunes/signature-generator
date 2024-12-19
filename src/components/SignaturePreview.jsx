@@ -38,28 +38,53 @@ const SignaturePreview = ({ signatureData }) => {
   const previewWrapperRef = useRef(null)
   const [templateHtml, setTemplateHtml] = useState('')
   const [showInstructions, setShowInstructions] = useState(false)
+  const [logoBase64, setLogoBase64] = useState('')
+
+  // Function to convert image to base64
+  const getImageAsBase64 = async (url) => {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      })
+    } catch (error) {
+      console.error('Error converting image to base64:', error)
+      return null
+    }
+  }
 
   useEffect(() => {
-    fetch('/signature-design/signature-template.htm')
-      .then(response => response.text())
-      .then(html => {
-        const fixedHtml = html
-          .replace(/src="[^"]*image001\.png"/g, 'src="/signature-design/signature-template/image001.png"')
-          .replace(/href="signature-template\//g, 'href="/signature-design/signature-template/"')
-          .replace(/charset=windows-1252/g, 'charset=utf-8')
-        setTemplateHtml(fixedHtml)
-      })
-      .catch(error => {
-        console.error('Error loading template:', error)
-        if (previewWrapperRef.current) {
-          previewWrapperRef.current.innerHTML = '<p class="text-destructive">Error loading signature template</p>'
-        }
-      })
+    // Load both the template and the logo
+    Promise.all([
+      fetch('/signature-design/signature-template.htm').then(res => res.text()),
+      getImageAsBase64('/signature-design/signature-template/image001.png')
+    ]).then(([html, base64Logo]) => {
+      setLogoBase64(base64Logo)
+      const fixedHtml = html
+        .replace(/charset=windows-1252/g, 'charset=utf-8')
+        .replace(/href="signature-template\//g, 'href="/signature-design/signature-template/"')
+      setTemplateHtml(fixedHtml)
+    }).catch(error => {
+      console.error('Error loading template or logo:', error)
+      if (previewWrapperRef.current) {
+        previewWrapperRef.current.innerHTML = '<p class="text-destructive">Error loading signature template</p>'
+      }
+    })
   }, [])
 
   useEffect(() => {
-    if (templateHtml && signatureRef.current && previewWrapperRef.current) {
+    if (templateHtml && signatureRef.current && previewWrapperRef.current && logoBase64) {
       let modifiedHtml = templateHtml
+
+      // Replace the image source with base64 data
+      modifiedHtml = modifiedHtml.replace(
+        /src="[^"]*image001\.png"/g,
+        `src="${logoBase64}"`
+      )
 
       // Capitalize positions and handle empty states
       const positionPT = signatureData.positionPT ? signatureData.positionPT.toUpperCase() : 'YOUR POSITION (PT)'
@@ -95,7 +120,7 @@ const SignaturePreview = ({ signatureData }) => {
       signatureRef.current.innerHTML = bodyContent
       previewWrapperRef.current.innerHTML = bodyContent
     }
-  }, [templateHtml, signatureData])
+  }, [templateHtml, signatureData, logoBase64])
 
   const copySignature = () => {
     if (signatureRef.current) {
