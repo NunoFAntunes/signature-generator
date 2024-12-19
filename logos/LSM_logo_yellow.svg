@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="3270.3208 408.3801 7185.5972 7185.6099" width="7185.5972" height="7185.6099" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+   
+    .fil5 {fill:#C5C6C6}
+    .fil4 {fill:#9D9E9E}
+    .fil3 {fill:#727271}
+    .fil6 {fill:#D7B56D}
+    .fil2 {fill:#9D9E9E;fill-rule:nonzero}
+    .fil1 {fill:#727271;fill-rule:nonzero}
+    .fil0 {fill:#D7B56D;fill-rule:nonzero}
+   
+  </style>
+  </defs>
+  <g id="_1782581297456" transform="matrix(1, 0, 0, 1, 3270.3174802755548, 118.49012346536256)">
+    <rect class="fil3" style="fill: rgb(255, 202, 24);" x="5935.5" y="6225.4" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil4" style="fill: rgb(255, 202, 24);" x="5935.5" y="4743.98" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil4" style="fill: rgb(255, 202, 24);" x="5935.5" y="3255.28" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil5" style="fill: rgb(255, 202, 24);" x="5935.5" y="1773.85" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil6" style="fill: rgb(255, 202, 24);" x="5935.5" y="289.89" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil4" transform="matrix(4.11915E-14 -1.5553 1.5553 4.11915E-14 4454.09 7475.49)" style="fill: rgb(255, 202, 24);" x="0" y="0" width="803.77" height="803.77" rx="96.444" ry="96.444"/>
+    <rect class="fil4" transform="matrix(4.11915E-14 -1.5553 1.5553 4.11915E-14 2965.39 7475.49)" style="fill: rgb(255, 202, 24);" x="0" y="0" width="803.77" height="803.77" rx="96.444" ry="96.444"/>
+    <rect class="fil5" transform="matrix(4.11915E-14 -1.5553 1.5553 4.11915E-14 1483.97 7475.49)" style="fill: rgb(255, 202, 24);" x="0" y="0" width="803.77" height="803.77" rx="96.444" ry="96.444"/>
+    <rect class="fil6" transform="matrix(4.11915E-14 -1.5553 1.5553 4.11915E-14 0.00334439 7475.49)" style="fill: rgb(255, 202, 24);" x="0" y="0" width="803.77" height="803.77" rx="96.444" ry="96.444"/>
+    <rect class="fil4" style="fill: rgb(255, 202, 24);" x="4454.09" y="4743.98" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil5" style="fill: rgb(255, 202, 24);" x="4454.09" y="3255.28" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil6" style="fill: rgb(255, 202, 24);" x="4454.09" y="1773.85" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil5" style="fill: rgb(255, 202, 24);" x="2965.39" y="4743.98" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil6" style="fill: rgb(255, 202, 24);" x="2965.39" y="3255.28" width="1250.1" height="1250.1" rx="150" ry="150"/>
+    <rect class="fil6" style="fill: rgb(255, 202, 24);" x="1483.97" y="4743.98" width="1250.1" height="1250.1" rx="150" ry="150"/>
+  </g>
+</svg>
