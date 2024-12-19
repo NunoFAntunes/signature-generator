@@ -7,25 +7,43 @@ const emailClients = [
     name: 'Gmail',
     icon: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg',
     instructions: `
-      <h3>How to add your signature in Gmail:</h3>
       <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
+        <li>Copie a assinatura deste Web site ou da sua caixa de entrada e, em seguida, no Gmail, clique no ícone de engrenagem no canto superior direito do ecrã e escolha Definições.</li>
+        <li>Clique no botão “Ver todas as definições”</li>
+        <li>No separador Geral, desloque-se para baixo até à secção “Assinatura”.</li>
+        <li>Clique em “Criar novo” e dê um nome à sua assinatura.</li>
+        <li>No campo de texto, cole sua assinatura usando Ctrl+V no Windows ou Command+V no Mac.</li>
+        <li>Na parte inferior da página, clique em Guardar alterações.</li>
       </ol>
     `
   },
   {
     name: 'Outlook',
     icon: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg',
-    instructions: `
-      <h3>How to add your signature in Outlook:</h3>
-      <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
-      </ol>
-    `
+    instructions: {
+      classic: {
+        title: 'Outlook (Classic)',
+        steps: [
+          'No Microsoft Outlook, no canto superior esquerdo, carregar em Ficheiro > Opções (canto inferior esquerdo) > Correio > Assinaturas.',
+          'No popup, selecionar Mail (correio) > Assinaturas (botão à direita).',
+          'Clique em "Nova" e dê um nome à assinatura (por exemplo: "Assinatura LSMAdvogados").',
+          'No campo de texto, cole sua assinatura usando Ctrl+V no Windows ou Command+V no Mac.',
+          'Selecione Salvar quando estiver pronto.',
+          'Selecione a nova assinatura salva para ser usada em novas mensagens e respostas, nos dois campos de seleção e salve novamente.'
+        ]
+      },
+      new: {
+        title: 'Outlook (New)',
+        steps: [
+          'No Outlook, selecione o ícone de configurações, junto ao canto superior direito da janela.',
+          'Selecione Contas > Assinaturas.',
+          'Clique em "Nova Assinatura" e renomeie a assinatura (por exemplo: "Assinatura LSMAdvogados").',
+          'No campo de texto, cole sua assinatura usando Ctrl+V no Windows ou Command+V no Mac.',
+          'Selecione Salvar.',
+          'Selecione a nova assinatura salva para ser usada em novas mensagens e respostas, nos dois campos de seleção e salve novamente.'
+        ]
+      }
+    }
   },
   {
     name: 'Apple Mail',
@@ -96,6 +114,7 @@ const SignaturePreview = ({ signatureData }) => {
   const [showInstructions, setShowInstructions] = useState(false)
   const [logoBase64, setLogoBase64] = useState('')
   const [selectedClient, setSelectedClient] = useState(null)
+  const [outlookVersion, setOutlookVersion] = useState('new')
 
   // Function to convert image to base64
   const getImageAsBase64 = async (url) => {
@@ -204,6 +223,44 @@ const SignaturePreview = ({ signatureData }) => {
     setSelectedClient(null)
   }
 
+  const renderInstructions = (client) => {
+    if (client.name === 'Outlook') {
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-center border-b mb-6">
+            <div className="space-x-8">
+              {['new', 'classic'].map((version) => (
+                <button
+                  key={version}
+                  onClick={() => setOutlookVersion(version)}
+                  className={`px-4 py-2 text-sm bg-transparent border-none outline-none cursor-pointer relative ${
+                    outlookVersion === version 
+                      ? 'text-[#00A4EF] after:absolute after:bottom-[-1px] after:left-0 after:right-0 after:h-[2px] after:bg-[#00A4EF]' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Outlook ({version})
+                </button>
+              ))}
+            </div>
+          </div>
+          <ol className="list-decimal pl-5 space-y-4">
+            {client.instructions[outlookVersion].steps.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+
+    return (
+      <div 
+        className="prose prose-sm max-w-none"
+        dangerouslySetInnerHTML={{ __html: client.instructions }}
+      />
+    )
+  }
+
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div className="flex flex-col space-y-1.5 p-6">
@@ -286,10 +343,7 @@ const SignaturePreview = ({ signatureData }) => {
                   </Dialog.Close>
                 </div>
                 <div className="p-6">
-                    <div 
-                      className="prose prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: selectedClient.instructions }}
-                    />
+                  {renderInstructions(selectedClient)}
                 </div>
               </>
             )}
