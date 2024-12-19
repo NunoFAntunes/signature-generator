@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react'
 const SignaturePreview = ({ signatureData }) => {
   const signatureRef = useRef(null)
   const [templateHtml, setTemplateHtml] = useState('')
+  const [showInstructions, setShowInstructions] = useState(false)
 
   useEffect(() => {
     // Fetch the template file from the correct path
@@ -16,7 +17,7 @@ const SignaturePreview = ({ signatureData }) => {
         ).replace(
           /href="signature-template\//g,
           'href="/signature-design/signature-template/'
-        )
+        ).replace(/charset=windows-1252/g, 'charset=utf-8')
         setTemplateHtml(fixedHtml)
       })
       .catch(error => {
@@ -65,7 +66,7 @@ const SignaturePreview = ({ signatureData }) => {
       window.getSelection().addRange(range)
       document.execCommand('copy')
       window.getSelection().removeAllRanges()
-      alert('Signature copied to clipboard!')
+      setShowInstructions(true)
     }
   }
 
@@ -96,20 +97,51 @@ const SignaturePreview = ({ signatureData }) => {
         <div ref={signatureRef} className="font-sans" />
       </div>
 
-      <div className="space-y-2">
-        <button
-          onClick={copySignature}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-        >
-          Copy Signature
-        </button>
-        <button
-          onClick={downloadSignature}
-          className="w-full bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
-        >
-          Download Signature File
-        </button>
-      </div>
+      <button
+        onClick={copySignature}
+        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+      >
+        Copy Signature
+      </button>
+
+      {showInstructions && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+            <h3 className="text-xl font-semibold mb-2">Signature copied to clipboard!</h3>
+            <p className="text-gray-600 mb-4">Want help setting up your signature? Choose your email client for detailed instructions:</p>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {[
+                'Gmail',
+                'iPhone/iPad',
+                'Outlook',
+                'Apple Mail',
+                'Samsung Mail',
+                'Thunderbird',
+                'Windows Mail'
+              ].map((client) => (
+                <button
+                  key={client}
+                  onClick={() => {
+                    // Here you can add specific instructions for each client
+                    alert(`Instructions for ${client} will be added soon!`)
+                  }}
+                  className="p-3 border rounded hover:bg-gray-50 text-center"
+                >
+                  {client}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="mt-6 w-full bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
