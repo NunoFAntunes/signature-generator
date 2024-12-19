@@ -42,6 +42,17 @@ const emailClients = [
           'Selecione Salvar.',
           'Selecione a nova assinatura salva para ser usada em novas mensagens e respostas, nos dois campos de seleção e salve novamente.'
         ]
+      },
+      web: {
+        title: 'Outlook (Web)',
+        steps: [
+          'No Web site do Outlook, selecione o ícone da engrenagem de definições junto ao canto superior direito da página.',
+          'Selecione Correio > Compor e responder.',
+          'Clique em “Nova assinatura” e dê-lhe um nome.',
+          'Na caixa branca grande, cole a sua assinatura utilizando Ctrl+V no Windows ou Command+V no Mac.',
+          'Selecione Guardar quando tiver terminado.',
+          'Selecione a assinatura que pretende para Novas mensagens e para Respostas/Reencaminhamentos e, em seguida, guarde novamente.'
+        ]
       }
     }
   },
@@ -225,18 +236,18 @@ const SignaturePreview = ({ signatureData }) => {
       return (
         <div className="space-y-4">
           <div className="flex justify-center border-b mb-6">
-            <div className="space-x-8">
-              {['new', 'classic'].map((version) => (
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+              {['new', 'classic', 'web'].map((version) => (
                 <button
                   key={version}
                   onClick={() => setOutlookVersion(version)}
-                  className={`px-4 py-2 text-sm bg-transparent border-none outline-none cursor-pointer relative ${
+                  className={`px-3 py-2 text-sm bg-transparent border-none outline-none cursor-pointer relative whitespace-nowrap ${
                     outlookVersion === version 
                       ? 'text-[#00A4EF] after:absolute after:bottom-[-1px] after:left-0 after:right-0 after:h-[2px] after:bg-[#00A4EF]' 
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  Outlook ({version})
+                  {client.instructions[version].title}
                 </button>
               ))}
             </div>
