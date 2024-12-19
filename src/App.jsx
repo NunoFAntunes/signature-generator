@@ -20,10 +20,10 @@ function App() {
             className="h-16 mb-4"
           />
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
-            Email Signature Generator
+            Gerar Assinatura de Email
           </h1>
           <p className="text-muted-foreground mt-2 text-center max-w-[700px]">
-            Generate your professional email signature with your personal information while maintaining the company's branding.
+            Gere sua assinatura de email profissional com suas informações pessoais.
           </p>
         </div>
 

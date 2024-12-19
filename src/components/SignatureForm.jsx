@@ -12,15 +12,15 @@ const SignatureForm = ({ signatureData, setSignatureData }) => {
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div className="flex flex-col space-y-1.5 p-6">
-        <h3 className="text-2xl font-semibold leading-none tracking-tight">Enter Your Information</h3>
+        <h3 className="text-2xl font-semibold leading-none tracking-tight">Informação Pessoal</h3>
         <p className="text-sm text-muted-foreground">
-          Fill in your details to generate your email signature.
+          Preencha suas informações para gerar sua assinatura de email.
         </p>
       </div>
       <div className="p-6 pt-0 space-y-4">
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Full Name
+            Nome Completo
           </label>
           <Input
             id="name"
@@ -34,41 +34,41 @@ const SignatureForm = ({ signatureData, setSignatureData }) => {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Position (Portuguese)
+              Posição (Português)
             </label>
             <Input
               id="positionPT"
               name="positionPT"
               value={signatureData.positionPT}
               onChange={handleChange}
-              placeholder="Desenvolvedor Senior"
+              placeholder="Advogado"
             />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Position (English)
+              Posição (Inglês)
             </label>
             <Input
               id="positionEN"
               name="positionEN"
               value={signatureData.positionEN}
               onChange={handleChange}
-              placeholder="Senior Developer"
+              placeholder="Lawyer"
             />
           </div>
         </div>
 
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Other Positions
+            Outras Posições
           </label>
           <Input
             id="otherPositions"
             name="otherPositions"
             value={signatureData.otherPositions}
             onChange={handleChange}
-            placeholder="PhD, Professor"
+            placeholder="Doutorado, Professor"
           />
         </div>
       </div>

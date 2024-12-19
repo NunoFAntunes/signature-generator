@@ -29,7 +29,7 @@ const emailClients = [
   },
   {
     name: 'Apple Mail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Apple_Mail.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg',
     instructions: `
       <h3>How to add your signature in Apple Mail:</h3>
       <ol>
@@ -41,7 +41,7 @@ const emailClients = [
   },
   {
     name: 'iPhone/iPad',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg',
     instructions: `
       <h3>How to add your signature on iPhone/iPad:</h3>
       <ol>
@@ -53,7 +53,7 @@ const emailClients = [
   },
   {
     name: 'Samsung Mail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Samsung_Logo.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Samsung_Email_icon.png',
     instructions: `
       <h3>How to add your signature in Samsung Mail:</h3>
       <ol>
@@ -77,7 +77,7 @@ const emailClients = [
   },
   {
     name: 'Windows Mail',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
+    icon: 'https://static.wikia.nocookie.net/logopedia/images/c/c9/Mail_Win10X.png',
     instructions: `
       <h3>How to add your signature in Windows Mail:</h3>
       <ol>
@@ -207,9 +207,9 @@ const SignaturePreview = ({ signatureData }) => {
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div className="flex flex-col space-y-1.5 p-6">
-        <h3 className="text-2xl font-semibold leading-none tracking-tight">Signature Preview</h3>
+        <h3 className="text-2xl font-semibold leading-none tracking-tight">Pré-visualização da Assinatura</h3>
         <p className="text-sm text-muted-foreground">
-          Preview how your signature will look in your email client.
+          Veja como sua assinatura vai ficar no seu email.
         </p>
       </div>
       
@@ -226,7 +226,7 @@ const SignaturePreview = ({ signatureData }) => {
           onClick={copySignature}
           className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
         >
-          <Mail className="mr-2 h-4 w-4" /> Copy Signature
+          <Mail className="mr-2 h-4 w-4" /> Copiar Assinatura
         </button>
       </div>
 
@@ -239,11 +239,11 @@ const SignaturePreview = ({ signatureData }) => {
                 <div className="flex items-center gap-2 text-emerald-600 p-6">
                   <CheckCircle2 className="h-5 w-5" />
                   <Dialog.Title className="text-lg font-semibold">
-                    Signature copied to clipboard!
+                    Assinatura copiada!
                   </Dialog.Title>
                 </div>
                 <Dialog.Description className="px-6 text-sm text-muted-foreground mb-6">
-                  Want help setting up your signature? Choose your email client for detailed instructions:
+                  Precisa de ajuda para configurar sua assinatura? Escolha seu email para ver as instruções detalhadas:
                 </Dialog.Description>
                 
                 <div className="px-6 pb-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -261,7 +261,7 @@ const SignaturePreview = ({ signatureData }) => {
               </>
             ) : (
               <>
-                <div className="flex items-center bg-[#F3F3F3] px-4 py-3">
+                <div className="flex items-center justify-between px-4 py-3 border-b">
                   <button
                     onClick={handleBackToClients}
                     className="flex items-center text-sm text-gray-600 hover:text-gray-900 bg-transparent border-none outline-none cursor-pointer"
@@ -270,41 +270,29 @@ const SignaturePreview = ({ signatureData }) => {
                     <span className="mr-1">←</span>
                     <span>back</span>
                   </button>
-                  <div className="flex items-center gap-2 ml-4">
+                  <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
                     <img src={selectedClient.icon} alt={selectedClient.name} className="w-5 h-5" />
                     <Dialog.Title className="text-base font-normal">
                       {selectedClient.name}
                     </Dialog.Title>
                   </div>
+                  <Dialog.Close asChild>
+                    <button
+                      className="p-1.5 rounded-full bg-white hover:bg-red-50 transition-colors border"
+                    >
+                      <X className="h-4 w-4 text-gray-500 hover:text-red-500" />
+                      <span className="sr-only">Close</span>
+                    </button>
+                  </Dialog.Close>
                 </div>
                 <div className="p-6">
-                  {selectedClient.name === 'Outlook' ? (
-                    <ol className="list-decimal pl-5 space-y-4">
-                      <li>Copy the signature from this website or your inbox, then within "New" Outlook select the Settings Gear icon near the top right of the window.</li>
-                      <li>Select Accounts &gt; Signatures.</li>
-                      <li>Click "New Signature" and give it a name.</li>
-                      <li>In the large white box paste your signature using Ctrl+V on Windows or Command+V on Mac.</li>
-                      <li>Select Save when you are done.</li>
-                      <li>If you want your signature to appear at the bottom of emails automatically, select which signature you would want for New Messages, and for Replies/Forwards. Then save again</li>
-                    </ol>
-                  ) : (
                     <div 
                       className="prose prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ __html: selectedClient.instructions }}
                     />
-                  )}
                 </div>
               </>
             )}
-
-            <Dialog.Close asChild>
-              <button
-                className="absolute right-4 top-4 p-1.5 rounded-full bg-white hover:bg-red-50 transition-colors border"
-              >
-                <X className="h-4 w-4 text-gray-500 hover:text-red-500" />
-                <span className="sr-only">Close</span>
-              </button>
-            </Dialog.Close>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
