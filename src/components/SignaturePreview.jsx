@@ -49,23 +49,15 @@ const emailClients = [
     name: 'Apple Mail',
     icon: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg',
     instructions: `
-      <h3>How to add your signature in Apple Mail:</h3>
       <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
-      </ol>
-    `
-  },
-  {
-    name: 'iPhone/iPad',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg',
-    instructions: `
-      <h3>How to add your signature on iPhone/iPad:</h3>
-      <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
+        <li>Na aplicação Mail do seu Mac, selecione Mail > Preferências.</li>
+        <li>Clique no separador “Assinaturas”.</li>
+        <li>Na coluna da esquerda, selecione a conta de e-mail onde pretende utilizar a assinatura.</li>
+        <li>Clique no botão “Mais” abaixo da coluna do meio.</li>
+        <li>Na coluna do meio, escreva um nome para a assinatura.</li>
+        <li>Desmarque a caixa “Corresponder sempre ao tipo de letra predefinido da minha mensagem”</li>
+        <li>Na coluna da direita (a pré-visualização), cole a assinatura utilizando as teclas Command+V.</li>
+        <li>Pode acontecer que as imagens não sejam exibidas corretamente. Isto trata-se de um erro do Apple Mail. Quando começar a compor uma nova mensagem de correio eletrónico, as imagens funcionarão.</li>
       </ol>
     `
   },
@@ -73,11 +65,12 @@ const emailClients = [
     name: 'Samsung Mail',
     icon: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Samsung_Email_icon.png',
     instructions: `
-      <h3>How to add your signature in Samsung Mail:</h3>
       <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
+        <li>Na aplicação Samsung Mail, toque no ícone do menu superior esquerdo com três barras.</li>
+        <li>Toque no ícone de engrenagem das definições no canto superior direito.</li>
+        <li>Toque na conta onde pretende aplicar a assinatura.</li>
+        <li>Nas definições da conta, active a assinatura e toque em para a editar.</li>
+        <li>Para colar a assinatura, no canto superior direito do teclado, toque nos três pontos e selecione a área de transferência e, em seguida, procure a assinatura a colar.</li>
       </ol>
     `
   },
@@ -85,11 +78,14 @@ const emailClients = [
     name: 'Thunderbird',
     icon: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Thunderbird_Logo%2C_2018.svg',
     instructions: `
-      <h3>How to add your signature in Thunderbird:</h3>
       <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
+        <li>No Thunderbird, selecione Ferramentas > Definições de conta.</li>
+        <li>No painel esquerdo, clique em selecionar a conta para a qual pretende utilizar a assinatura.</li>
+        <li>Localize a área “Texto da assinatura”.</li>
+        <li>Selecione a caixa “Utilizar HTML”.</li>
+        <li>Cole a sua assinatura na caixa de texto utilizando Ctrl+V no Windows ou Command+V no Mac.</li>
+        <li>Ela aparecerá como código HTML, o que é o correto.</li>
+        <li>As margens vermelhas à volta da sua assinatura são apenas da pré-visualização! Quando a mensagem de correio eletrónico for enviada, não aparecerá para o destinatário da mensagem.</li>
       </ol>
     `
   },
@@ -97,11 +93,12 @@ const emailClients = [
     name: 'Windows Mail',
     icon: 'https://static.wikia.nocookie.net/logopedia/images/c/c9/Mail_Win10X.png',
     instructions: `
-      <h3>How to add your signature in Windows Mail:</h3>
       <ol>
-        <li>Step 1: Instructions will be added here</li>
-        <li>Step 2: Instructions will be added here</li>
-        <li>Step 3: Instructions will be added here</li>
+        <li>Copie a assinatura deste sítio Web ou da sua caixa de entrada e, em seguida, no Windows Mail, perto da parte inferior da barra lateral esquerda, clique no ícone “Engrenagem”.</li>
+        <li>Isto fará aparecer uma barra de “Definições”, perto do meio da qual deverá encontrar “Assinatura”.</li>
+        <li>O Windows Mail só suporta uma única assinatura. Coloque a opção “Utilizar uma assinatura de e-mail” em “Ligado”.</li>
+        <li>Cole a assinatura na caixa Editar assinatura utilizando Ctrl+V.</li>
+        <li>Escolha “Guardar” para manter a nova assinatura e regressar à caixa de entrada.</li>
       </ol>
     `
   }
@@ -244,20 +241,41 @@ const SignaturePreview = ({ signatureData }) => {
               ))}
             </div>
           </div>
-          <ol className="list-decimal pl-5 space-y-4">
+          <div className="space-y-6">
             {client.instructions[outlookVersion].steps.map((step, index) => (
-              <li key={index}>{step}</li>
+              <div key={index} className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 border-[#00A4EF] text-[#00A4EF] flex items-center justify-center font-medium bg-white">
+                  {index + 1}
+                </div>
+                <div className="flex-1 pt-1">
+                  <p className="text-gray-700">{step}</p>
+                </div>
+              </div>
             ))}
-          </ol>
+          </div>
         </div>
       )
     }
 
     return (
-      <div 
-        className="prose prose-sm max-w-none"
-        dangerouslySetInnerHTML={{ __html: client.instructions }}
-      />
+      <div className="space-y-6">
+        {client.instructions.split('</li>').map((step, index) => {
+          if (!step.includes('<li>')) return null;
+          const content = step.split('<li>')[1];
+          if (!content) return null;
+          
+          return (
+            <div key={index} className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 border-[#00A4EF] text-[#00A4EF] flex items-center justify-center font-medium bg-white">
+                {index + 1}
+              </div>
+              <div className="flex-1 pt-1">
+                <p className="text-gray-700">{content}</p>
+              </div>
+            </div>
+          );
+        }).filter(Boolean)}
+      </div>
     )
   }
 
