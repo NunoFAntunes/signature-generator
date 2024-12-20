@@ -450,7 +450,7 @@ const SignaturePreview = ({ signatureData }) => {
             <div className="p-4 space-y-4 max-h-[50vh] overflow-y-auto">
               <div className="text-sm text-gray-800">
                 Prezado(a),<br /><br />
-                Este é um exemplo de como a sua assinatura aparecerá no seu email.<br /><br />
+                Este é um exemplo de como a sua assinatura aparecerá num email.<br /><br />
                 Atenciosamente,
               </div>
               <div className="border-t pt-4">

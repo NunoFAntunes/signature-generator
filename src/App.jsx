@@ -22,9 +22,6 @@ function App() {
           <h1 className="scroll-m-20 text-3xl sm:text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
             Gerar Assinatura de Email
           </h1>
-          <p className="text-muted-foreground mt-2 text-center max-w-[700px]">
-            Gere sua assinatura de email profissional com suas informações pessoais.
-          </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 w-full">
