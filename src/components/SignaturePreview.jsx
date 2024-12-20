@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Mail, X, CheckCircle2 } from 'lucide-react'
+import { Mail, X, CheckCircle2, Eye } from 'lucide-react'
 
 const emailClients = [
   {
@@ -118,11 +118,14 @@ const emailClients = [
 const SignaturePreview = ({ signatureData }) => {
   const signatureRef = useRef(null)
   const previewWrapperRef = useRef(null)
+  const emailPreviewRef = useRef(null)
   const [templateHtml, setTemplateHtml] = useState('')
   const [showInstructions, setShowInstructions] = useState(false)
   const [logoBase64, setLogoBase64] = useState('')
   const [selectedClient, setSelectedClient] = useState(null)
   const [outlookVersion, setOutlookVersion] = useState('new')
+  const [showEmailPreview, setShowEmailPreview] = useState(false)
+  const [processedSignature, setProcessedSignature] = useState('')
 
   // Function to convert image to base64
   const getImageAsBase64 = async (url) => {
@@ -161,7 +164,7 @@ const SignaturePreview = ({ signatureData }) => {
   }, [])
 
   useEffect(() => {
-    if (templateHtml && signatureRef.current && previewWrapperRef.current && logoBase64) {
+    if (templateHtml && logoBase64) {
       let modifiedHtml = templateHtml
 
       // Replace the image source with base64 data
@@ -200,9 +203,19 @@ const SignaturePreview = ({ signatureData }) => {
       // Extract only the body content
       const bodyContent = modifiedHtml.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] || modifiedHtml
       
-      // Update both refs with the body content
-      signatureRef.current.innerHTML = bodyContent
-      previewWrapperRef.current.innerHTML = bodyContent
+      // Update refs with the body content
+      if (signatureRef.current) {
+        signatureRef.current.innerHTML = bodyContent
+      }
+      if (previewWrapperRef.current) {
+        previewWrapperRef.current.innerHTML = bodyContent
+      }
+      if (emailPreviewRef.current) {
+        emailPreviewRef.current.innerHTML = bodyContent
+      }
+
+      // Store the processed HTML for later use
+      setProcessedSignature(bodyContent)
     }
   }, [templateHtml, signatureData, logoBase64])
 
@@ -290,6 +303,17 @@ const SignaturePreview = ({ signatureData }) => {
     )
   }
 
+  // Update email preview when dialog opens
+  useEffect(() => {
+    if (showEmailPreview && emailPreviewRef.current && processedSignature) {
+      setTimeout(() => {
+        if (emailPreviewRef.current) {
+          emailPreviewRef.current.innerHTML = processedSignature
+        }
+      }, 100)
+    }
+  }, [showEmailPreview, processedSignature])
+
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full overflow-hidden">
       <div className="flex flex-col space-y-1.5 p-3 sm:p-6">
@@ -308,12 +332,20 @@ const SignaturePreview = ({ signatureData }) => {
           <div ref={previewWrapperRef} style={{ width: 'min(fit-content, 100%)', minWidth: '300px' }} />
         </div>
 
-        <button
-          onClick={copySignature}
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-        >
-          <Mail className="mr-2 h-4 w-4" /> Copiar Assinatura
-        </button>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <button
+            onClick={copySignature}
+            className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+          >
+            <Mail className="mr-2 h-4 w-4" /> Copiar Assinatura
+          </button>
+          <button
+            onClick={() => setShowEmailPreview(true)}
+            className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 px-4 py-2"
+          >
+            <Eye className="mr-2 h-4 w-4" /> Ver em Email
+          </button>
+        </div>
       </div>
 
       <Dialog.Root open={showInstructions} onOpenChange={setShowInstructions}>
@@ -353,7 +385,7 @@ const SignaturePreview = ({ signatureData }) => {
                     className="flex items-center text-sm text-gray-600 hover:text-gray-900 bg-transparent border-none outline-none cursor-pointer"
                     style={{ padding: 0 }}
                   >
-                    <span className="mr-1">←</span>
+                    <span className="mr-1">��</span>
                     <span>back</span>
                   </button>
                   <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
@@ -376,6 +408,59 @@ const SignaturePreview = ({ signatureData }) => {
                 </div>
               </>
             )}
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* Email Preview Dialog */}
+      <Dialog.Root open={showEmailPreview} onOpenChange={setShowEmailPreview}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+          <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh] w-[90vw] max-w-[800px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-white shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
+              <div className="flex items-center gap-2">
+                <Mail className="h-5 w-5 text-gray-500" />
+                <Dialog.Title className="text-base font-medium">
+                  Nova Mensagem
+                </Dialog.Title>
+              </div>
+              <Dialog.Close asChild>
+                <button
+                  className="p-1.5 rounded-full hover:bg-gray-200 transition-colors"
+                >
+                  <X className="h-4 w-4 text-gray-500" />
+                  <span className="sr-only">Close</span>
+                </button>
+              </Dialog.Close>
+            </div>
+            <div className="p-4 space-y-3 border-b">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 w-16">Para:</span>
+                <div className="flex-1 text-sm text-gray-800 px-2 py-1 bg-gray-100 rounded">
+                  destinatario@email.com
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 w-16">Assunto:</span>
+                <div className="flex-1 text-sm text-gray-800 px-2 py-1 bg-gray-100 rounded">
+                  Exemplo de Email com Assinatura
+                </div>
+              </div>
+            </div>
+            <div className="p-4 space-y-4 max-h-[50vh] overflow-y-auto">
+              <div className="text-sm text-gray-800">
+                Prezado(a),<br /><br />
+                Este é um exemplo de como a sua assinatura aparecerá no seu email.<br /><br />
+                Atenciosamente,
+              </div>
+              <div className="border-t pt-4">
+                <div 
+                  ref={emailPreviewRef}
+                  className="signature-preview"
+                  dangerouslySetInnerHTML={{ __html: processedSignature }}
+                />
+              </div>
+            </div>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
