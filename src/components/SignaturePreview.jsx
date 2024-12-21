@@ -341,7 +341,7 @@ const SignaturePreview = ({ signatureData }) => {
           </button>
           <button
             onClick={() => setShowEmailPreview(true)}
-            className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 px-4 py-2"
+            className="sm:w-1/3 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 px-4 py-2"
           >
             <Eye className="mr-2 h-4 w-4" /> Ver em Email
           </button>
@@ -385,8 +385,8 @@ const SignaturePreview = ({ signatureData }) => {
                     className="flex items-center text-sm text-gray-600 hover:text-gray-900 bg-transparent border-none outline-none cursor-pointer"
                     style={{ padding: 0 }}
                   >
-                    <span className="mr-1">��</span>
-                    <span>back</span>
+                    <span className="mr-1">←</span>
+                    <span>Voltar</span>
                   </button>
                   <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
                     <img src={selectedClient.icon} alt={selectedClient.name} className="w-5 h-5" />
