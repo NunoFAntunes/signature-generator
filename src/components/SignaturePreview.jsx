@@ -144,6 +144,20 @@ const SignaturePreview = ({ signatureData }) => {
     }
   }
 
+  // Function to minify HTML by removing unnecessary whitespace and newlines
+  const minifyHtml = (html) => {
+    return html
+      .replace(/\n/g, '') // Remove newlines
+      .replace(/\t/g, '') // Remove tabs
+      .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+      .replace(/>\s+</g, '><') // Remove spaces between tags
+      .replace(/\s+>/g, '>') // Remove spaces before closing bracket
+      .replace(/>\s+/g, '>') // Remove spaces after closing bracket
+      .replace(/\s+</g, '<') // Remove spaces before opening bracket
+      .replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
+      .trim() // Remove leading/trailing whitespace
+  }
+
   useEffect(() => {
     // Load both the template and the logo
     Promise.all([
@@ -222,13 +236,33 @@ const SignaturePreview = ({ signatureData }) => {
   const copySignature = () => {
     if (signatureRef.current) {
       try {
-        const range = document.createRange()
-        range.selectNode(signatureRef.current)
-        window.getSelection().removeAllRanges()
-        window.getSelection().addRange(range)
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
-        setShowInstructions(true)
+        const minifiedHtml = minifyHtml(signatureRef.current.innerHTML)
+        
+        // Create a blob with HTML content
+        const blob = new Blob([minifiedHtml], { type: 'text/html' })
+        const htmlItem = new ClipboardItem({
+          'text/html': blob,
+          'text/plain': new Blob([minifiedHtml], { type: 'text/plain' })
+        })
+
+        // Use the new Clipboard API to write both HTML and plain text
+        navigator.clipboard.write([htmlItem]).then(() => {
+          setShowInstructions(true)
+        }).catch((err) => {
+          console.error('Failed to copy using Clipboard API:', err)
+          // Fallback for older browsers
+          const container = document.createElement('div')
+          container.innerHTML = minifiedHtml
+          document.body.appendChild(container)
+          const range = document.createRange()
+          range.selectNodeContents(container)
+          const selection = window.getSelection()
+          selection.removeAllRanges()
+          selection.addRange(range)
+          document.execCommand('copy')
+          document.body.removeChild(container)
+          setShowInstructions(true)
+        })
       } catch (err) {
         console.error('Failed to copy:', err)
         alert('Failed to copy signature. Please try again.')
