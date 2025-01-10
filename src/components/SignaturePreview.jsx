@@ -147,14 +147,10 @@ const SignaturePreview = ({ signatureData }) => {
   // Function to minify HTML by removing unnecessary whitespace and newlines
   const minifyHtml = (html) => {
     return html
-      .replace(/\n/g, '') // Remove newlines
-      .replace(/\t/g, '') // Remove tabs
       .replace(/\s+/g, ' ') // Replace multiple spaces with single space
       .replace(/>\s+</g, '><') // Remove spaces between tags
       .replace(/\s+>/g, '>') // Remove spaces before closing bracket
-      .replace(/>\s+/g, '>') // Remove spaces after closing bracket
-      .replace(/\s+</g, '<') // Remove spaces before opening bracket
-      .replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
+      .replace(/<\s+/g, '<') // Remove spaces after closing bracket
       .trim() // Remove leading/trailing whitespace
   }
 
@@ -207,7 +203,7 @@ const SignaturePreview = ({ signatureData }) => {
       if (otherPositions) {
         modifiedHtml = modifiedHtml.replace(
           '{{OTHER_POSITIONS}}',
-          `<span style='font-size:10.0pt;font-family:"Helvetica",sans-serif;color:#777777;letter-spacing:1.5pt;mso-font-kerning:0pt;mso-ligatures:none'>${otherPositions}</span>`
+          `${otherPositions}`
         )
       } else {
         // Remove the placeholder if no other positions
