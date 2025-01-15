@@ -349,7 +349,7 @@ const SignaturePreview = ({ signatureData }) => {
       <div className="flex flex-col space-y-1.5 p-3 sm:p-6">
         <h3 className="text-2xl font-semibold leading-none tracking-tight">Pré-visualização da Assinatura</h3>
         <p className="text-sm text-muted-foreground">
-          Veja como sua assinatura vai ficar no seu email.
+          Veja como a sua assinatura vai ficar no seu email.
         </p>
       </div>
       
@@ -433,7 +433,7 @@ const SignaturePreview = ({ signatureData }) => {
                     </button>
                   </Dialog.Close>
                 </div>
-                <div className="p-6">
+                <div className="p-6 max-h-[60vh] overflow-y-auto">
                   {renderInstructions(selectedClient)}
                 </div>
               </>
